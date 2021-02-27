@@ -4,12 +4,6 @@
 ## Dependencies
 - ROS Noetic
 - Anaconda
-- Python 3.7
-- Tensorflow 1.4.0
-- Keras 2.1.2
-- scikit-image 0.18.1
-- scipy 1.6.1
-
 
 ## Installation
 - Create conda environment from environment.yml file `conda env create -f environment.yml`
