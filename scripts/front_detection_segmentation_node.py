@@ -14,9 +14,14 @@ from cv_bridge import CvBridge, CvBridgeError
 from mask_rcnn import coco
 from mask_rcnn import model as modellib
 from mask_rcnn import utils
+from mask_rcnn import visualize
 
 print("Python version")
 print (sys.version)
+
+
+CLASS_NAMES = ["BG", "rot_front", "trans_front"]
+
 
 class InferenceConfig(coco.FrontHandlerConfig):
     GPU_COUNT = 1
@@ -39,7 +44,12 @@ class DetectorSegmentator:
         self.model = modellib.MaskRCNN(mode="inference", model_dir="", config=config)
 
         # Load trained weights
-        model_path = rospy.get_param("mrcnn_model_path", None)
+        model_path = rospy.get_param("mrcnn_model_dir", None)
+        self.model.load_weights(model_path, by_name=True)
+
+        # Load class names and colors
+        self.class_names = CLASS_NAMES
+        self.class_colors = visualize.random_colors(len(self.class_names))
 
     def image_callback(self, data):
         try:
