@@ -1,8 +1,8 @@
-name: mask_rcnn_ros
+name: ros_mask_rcnn
 channels:
   - robostack
-  - anaconda
   - conda-forge
+  - anaconda
   - defaults
 dependencies:
   - _libgcc_mutex=0.1=main
@@ -384,11 +384,11 @@ dependencies:
     - pyqtchart==5.12
     - pyqtwebengine==5.12.1
     - tensorboard==1.14.0
+    - tensorflow==1.14.0
     - tensorflow-estimator==1.14.0
-    - tensorflow-gpu==1.14.0
     - termcolor==1.1.0
     - typing-extensions==3.7.4.3
     - werkzeug==1.0.1
     - wrapt==1.12.1
     - zipp==3.4.0
-prefix: /home/arek/anaconda3/envs/mask_rcnn_ros
+prefix: /home/arek/anaconda3/envs/ros_mask_rcnn
