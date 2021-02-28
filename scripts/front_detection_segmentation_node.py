@@ -10,9 +10,12 @@ import numpy as np
 
 # ROS imports
 import rospy
-from std_msgs.msg import String, Header
-from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
+from sensor_msgs.msg import Image, RegionOfInterest
+from std_msgs.msg import String, Header
+
+# ROS package imports
+from front_detection_segmentation.msg import FrontPrediction
 
 # Mask RCNN
 from mask_rcnn import dataset
@@ -86,6 +89,8 @@ class DetectorSegmentator:
                 cv_prediction = np.zeros(shape=visualized_image.shape, dtype=np.uint8)
                 cv2.convertScaleAbs(visualized_image, cv_prediction)
 
+                self.build_prediction_msg(msg, prediction)
+
                 cv2.imshow("Image", cv_prediction)
                 cv2.waitKey(1)
 
@@ -117,6 +122,44 @@ class DetectorSegmentator:
         result = result.reshape((int(h), int(w), 3))
         return result
 
+    def build_prediction_msg(self, msg, prediction):
+        prediction_msg = FrontPrediction()
+        prediction_msg.header = msg.header
+
+        # For each prediction ROI create prediction message
+        for i, (y1, x1, y2, x2) in enumerate(prediction["rois"]):
+            # Create boudning box field for current prediction ROI
+            box = RegionOfInterest()
+            box.x_offset = np.asscalar(x1)
+            box.y_offset = np.asscalar(y1)
+            box.height = np.asscalar(y2 - y1)
+            box.width = np.asscalar(x2-x1)
+            prediction_msg.boxes.append(box)
+
+            # Add class_id
+            class_id = prediction['class_ids'][i]
+            prediction_msg.class_ids.append(class_id)
+
+            # Add class name
+            class_name = self.class_names[class_id]
+            prediction_msg.class_names.append(class_name)
+
+            # Add prediction score
+            score = prediction["scores"][i]
+            prediction_msg.scores.append(score)
+
+            # Create prediction mask for current ROI
+            mask = Image()
+            mask.header = msg.header
+            mask.height = prediction["masks"].shape[0]
+            mask.width = prediction["masks"].shape[1]
+            mask.encoding = "mono8"
+            mask.is_bigendian = False
+            mask.step = mask.width
+            mask.data = (prediction["masks"][:, :, i] * 255).tobytes()
+            prediction_msg.masks.append(mask)
+
+        return prediction_msg
 
 def main(args):
     rospy.init_node("front_detection_segmentation")
