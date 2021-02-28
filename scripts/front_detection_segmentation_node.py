@@ -15,7 +15,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
 # Mask RCNN
-from mask_rcnn import coco
+from mask_rcnn import dataset
 from mask_rcnn import model as modellib
 from mask_rcnn import utils
 from mask_rcnn import visualize
@@ -24,7 +24,8 @@ CLASS_NAMES = ["BG", "rot_front", "trans_front"]
 
 # TODO: Try to run with CUDA -> point to cuda tool kit and cudnn from conda environment
 
-class InferenceConfig(coco.FrontHandlerConfig):
+
+class InferenceConfig(dataset.FrontDetectionConfig):
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
     IMAGE_MIN_DIM = 480
