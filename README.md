@@ -31,10 +31,11 @@ catkin_make
 ## Run with
 
 From activated conda environment run following commands (**remember to source ROS base and devel environment**):
-- Setup RGB image (640x480) topic:
+- Setup ROS parameters:
 ```
 rosparam set rgb_image_topic "image/topic"
 rosparam set mrcnn_model_dir "path/to/model/mask_rcnn_model.h5"
+rosparam set front_prediction_topic "topic/to/publish/prediction"
 ```
 
 - Run with

@@ -40,6 +40,8 @@ class DetectorSegmentator:
 
     def __init__(self, rgb_image_topic):
 
+        front_prediction_topic = rospy.get_param("front_prediction_topic", default="front_prediction")
+        self.prediction_pub = rospy.Publisher(front_prediction_topic, FrontPrediction, queue_size=1)
         self.rgb_image_topic = rgb_image_topic
 
         self.cv_bridge = CvBridge()
@@ -89,7 +91,9 @@ class DetectorSegmentator:
                 cv_prediction = np.zeros(shape=visualized_image.shape, dtype=np.uint8)
                 cv2.convertScaleAbs(visualized_image, cv_prediction)
 
-                self.build_prediction_msg(msg, prediction)
+                # Build prediction message
+                prediction_msg = self.build_prediction_msg(msg, prediction)
+                self.prediction_pub.publish(prediction_msg)
 
                 cv2.imshow("Image", cv_prediction)
                 cv2.waitKey(1)
@@ -160,6 +164,7 @@ class DetectorSegmentator:
             prediction_msg.masks.append(mask)
 
         return prediction_msg
+
 
 def main(args):
     rospy.init_node("front_detection_segmentation")
