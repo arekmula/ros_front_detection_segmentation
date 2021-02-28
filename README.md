@@ -36,6 +36,7 @@ From activated conda environment run following commands (**remember to source RO
 rosparam set rgb_image_topic "image/topic"
 rosparam set mrcnn_model_dir "path/to/model/mask_rcnn_model.h5"
 rosparam set front_prediction_topic "topic/to/publish/prediction"
+rosparam set visualize_front_prediction True/False
 ```
 
 - Run with

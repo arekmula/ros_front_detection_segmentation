@@ -40,11 +40,21 @@ class DetectorSegmentator:
 
     def __init__(self, rgb_image_topic):
 
+        # Topic name where prediction will be published
         front_prediction_topic = rospy.get_param("front_prediction_topic", default="front_prediction")
         self.prediction_pub = rospy.Publisher(front_prediction_topic, FrontPrediction, queue_size=1)
+
+        # Topic name of 640x480 image to subscribe
         self.rgb_image_topic = rgb_image_topic
 
+        # Should publish visualization image
+        self.should_publish_visualization = rospy.get_param("visualize_front_prediction", True)
+        if self.should_publish_visualization:
+            self.vis_pub = rospy.Publisher("front_visualization", Image, queue_size=1)
+
         self.cv_bridge = CvBridge()
+
+        # Inference config
         config = InferenceConfig()
         config.display()
 
@@ -87,16 +97,21 @@ class DetectorSegmentator:
                 # Prediction on single image frame
                 prediction = self.model.detect([cv_image], verbose=0)[0]
 
-                visualized_image = self.visualize_prediction(prediction, cv_image)
-                cv_prediction = np.zeros(shape=visualized_image.shape, dtype=np.uint8)
-                cv2.convertScaleAbs(visualized_image, cv_prediction)
+                # Publish visualization image
+                if self.should_publish_visualization:
+                    visualized_image = self.visualize_prediction(prediction, cv_image)
+                    cv_prediction = np.zeros(shape=visualized_image.shape, dtype=np.uint8)
+                    cv2.convertScaleAbs(visualized_image, cv_prediction)
+                    visualization_msg = self.cv_bridge.cv2_to_imgmsg(cv_prediction, "bgr8")
+                    self.vis_pub.publish(visualization_msg)
 
                 # Build prediction message
                 prediction_msg = self.build_prediction_msg(msg, prediction)
                 self.prediction_pub.publish(prediction_msg)
 
-                cv2.imshow("Image", cv_prediction)
-                cv2.waitKey(1)
+                # Show open cv window
+                # cv2.imshow("Image", cv_prediction)
+                # cv2.waitKey(1)
 
             rate.sleep()
 
