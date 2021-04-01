@@ -175,7 +175,8 @@ class DetectorSegmentator:
             mask.encoding = "mono8"
             mask.is_bigendian = False
             mask.step = mask.width
-            mask.data = (prediction["masks"][:, :, i] * 255).tobytes()
+            prediction_mask = (prediction["masks"][:, :, i]).astype(np.uint8)  # Convert boolean array to int array
+            mask.data = (prediction_mask * 255).tobytes()
             prediction_msg.masks.append(mask)
 
         return prediction_msg
