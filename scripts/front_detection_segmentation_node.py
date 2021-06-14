@@ -94,12 +94,13 @@ class DetectorSegmentator:
                 except CvBridgeError as e:
                     print(e)
 
+                cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
                 # Prediction on single image frame
                 prediction = self.model.detect([cv_image], verbose=0)[0]
 
                 # Publish visualization image
                 if self.should_publish_visualization:
-                    visualized_image = self.visualize_prediction(prediction, cv_image)
+                    visualized_image = self.visualize_prediction(prediction, cv2.cvtColor(cv_image, cv2.COLOR_RGB2BGR))
                     cv_prediction = np.zeros(shape=visualized_image.shape, dtype=np.uint8)
                     cv2.convertScaleAbs(visualized_image, cv_prediction)
                     visualization_msg = self.cv_bridge.cv2_to_imgmsg(cv_prediction, "bgr8")
