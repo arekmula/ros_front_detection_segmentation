@@ -16,6 +16,17 @@ objects" and works best with the other three modules that can be found here:
 
 The node utilizes conda virtual environment to separate the environment variables such as Tensorflow version or
 CUDA version.
+## Results
+
+### Detection
+- mAP@IoU=.50 -> **0.77**
+- mAP@IoU=.75 -> **0.71**
+- mAP@IoU=.90 -> **0.38**
+
+### Segmentation
+- Dice score of rotational fronts -> **0.82**
+- Dice score of transitional fronts -> **0.77** 
+
 ## Dependencies
 - Ubuntu 20.04
 - ROS Noetic
