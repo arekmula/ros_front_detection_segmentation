@@ -1,8 +1,8 @@
 # ros_front_detection_segmentation
 <p align="center">
-  <img alt="1" src="imgs/front1.png" width="50%">
+  <img alt="1" src="imgs/front1.png" width="49%">
 &nbsp; &nbsp; &nbsp; &nbsp;
-  <img alt="2" src="imgs/front2.png" width="50%">
+  <img alt="2" src="imgs/front2.png" width="49%">
 </p>
 
 The goal of the project is to build a ROS node that would be responsible for detecting rotational fronts and transitional fronts and then perform a segmentation of the fronts. The module is based on [matterport's Mask RCNN](https://github.com/matterport/Mask_RCNN) implementation. The data used for training, evaluation and testing is available [here](https://drive.google.com/file/d/1Ew7lTeXDGnlB5FdhEo6qpo2STPL3K-2m/view?usp=sharing):
