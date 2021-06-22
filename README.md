@@ -1,10 +1,34 @@
 # ros_front_detection_segmentation
-Ros node that's using [MaskRCNN](https://github.com/matterport/Mask_RCNN) and Tensorflow to detect and run segmetation to distinguish rotational fronts from transitional fronts.
-The code for training the network can be found in [another repository](https://github.com/arekmula/mrcnn_instance_segmentation)
+<p align="center">
+  <img alt="1" src="imgs/front1.png" width="40%">
+&nbsp; &nbsp; &nbsp; &nbsp;
+  <img alt="2" src="imgs/front2.png" width="40%">
+</p>
+
+The goal of the project is to build a ROS node that would be responsible for detecting rotational fronts and transitional fronts and then perform a segmentation of the fronts. The module is based on [matterport's Mask RCNN](https://github.com/matterport/Mask_RCNN) implementation. The data used for training, evaluation and testing is available [here](https://drive.google.com/file/d/1Ew7lTeXDGnlB5FdhEo6qpo2STPL3K-2m/view?usp=sharing):
+
+ This module is part of my master thesis "Point cloud-based model of the scene enhanced with information about articulated
+objects" and works best with the other three modules that can be found here:
+- [Handler detector](https://github.com/arekmula/ros_handler_detector)
+- [Rotational joint detector](https://github.com/arekmula/ros_joint_segmentation)
+- [Articulated objects scene builder](https://github.com/arekmula/articulated_objects_scene_builder)
+
 
 The node utilizes conda virtual environment to separate the environment variables such as Tensorflow version or
 CUDA version.
+## Results
+
+### Detection
+- mAP@IoU=.50 -> **0.77**
+- mAP@IoU=.75 -> **0.71**
+- mAP@IoU=.90 -> **0.38**
+
+### Segmentation
+- Dice score of rotational fronts -> **0.82**
+- Dice score of transitional fronts -> **0.77** 
+
 ## Dependencies
+- Ubuntu 20.04
 - ROS Noetic
 - Anaconda
 
